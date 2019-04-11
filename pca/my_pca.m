@@ -1,21 +1,24 @@
 function [] = my_pca(img_name)
 	img = imread(img_name);
 	img = im2double(rgb2gray(img));
+	img = imresize(img, 0.8);
 	
-	M = mean(img, 2);
-
-	for i = size(M,2)
-		img(:,i) = img(:,i) - M;
-	end
+	m = mean(img);
+	[row, col] = size(img);
+	m = repmat(m, row, 1);
+	img = img - m;
 	
 	c = img'*img;
-	[v,d] = eig(c);
+	[v,d] = my_eig(c);
 	[v,d] =  sortem(v,d);
 
-	[m, m] = size(v);
-	v = v(:, 1:m/2);
+	[r, r] = size(v);
+	% v = v(:, 1:r/2);
+	v = v(:,1:10);
+	size(v)
 
-	red_img = img*v;
+	red_img = v*v'*img';
+	red_img = red_img' + m;
 
 	imshow(red_img);
 	drawnow;

@@ -8,7 +8,7 @@ function [Q, R] = my_qr(A)
 		normx = norm(u);
 		
 		if u(1) < 0
-			normx = - normx;
+			normx = -normx;
 		end		
 
 		u(1) = u(1) + normx;
