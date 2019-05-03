@@ -14,7 +14,7 @@ function [] = my_pca(img_name)
 
 	[r, r] = size(v);
 	% v = v(:, 1:r/2);
-	v = v(:,1:10);
+	v = v(:,1:50);
 	size(v)
 
 	red_img = v*v'*img';

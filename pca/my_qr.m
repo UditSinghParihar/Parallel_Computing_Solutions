@@ -14,7 +14,7 @@ function [Q, R] = my_qr(A)
 		u(1) = u(1) + normx;
 		tau = u(1) / normx;
 		u = u/u(1);
-
+		H = eye(size(u,1)) - tau*u*u';
 		R(j:end,j:end) = R(j:end,j:end) - tau * (u * u') * R(j:end,j:end);
 		Q(:,j:end) = Q(:,j:end) - Q(:,j:end)*(tau * u * u');
 	end
