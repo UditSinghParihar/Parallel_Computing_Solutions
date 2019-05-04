@@ -86,7 +86,7 @@ void la::householder(la::Vector u, la::Matrix& P){
 	}
 }
 
-la::Matrix la::matrix_mul(const la::Matrix& A, const la::Matrix& B){
+la::Matrix la::mat_mul(const la::Matrix& A, const la::Matrix& B){
 	const int rows_a = A.size(), cols_a = A[0].size();
 	const int rows_b = B.size(), cols_b = B[0].size();
 	la::Matrix C(rows_a, la::Vector(cols_b));
@@ -102,7 +102,7 @@ la::Matrix la::matrix_mul(const la::Matrix& A, const la::Matrix& B){
 	return C;
 }
 
-void la::matrix_mul(const la::Matrix& A, const la::Matrix& B, la::Matrix& C,
+void la::mat_mul(const la::Matrix& A, const la::Matrix& B, la::Matrix& C,
 	int a_row_begin=0, int a_col_begin=0, int b_row_begin=0, int b_col_begin=0){
 	
 	const int rows_a = A.size(), cols_a = A[0].size();
@@ -140,8 +140,8 @@ void la::qr(const la::Matrix& A, la::Matrix& Q, la::Matrix& R){
 		la::Matrix Q_sub(rows, la::Vector(cols));
 		la::Matrix R_sub(rows, la::Vector(cols));
 
-		matrix_mul(H, R, R_sub, 0, 0, i, i);
-		matrix_mul(Q, H, Q_sub, 0, i, 0, 0);
+		mat_mul(H, R, R_sub, 0, 0, i, i);
+		mat_mul(Q, H, Q_sub, 0, i, 0, 0);
 		
 		for(int k=0; k<size; ++k){
 			for(int l=0; l<size; ++l){
@@ -156,4 +156,25 @@ void la::qr(const la::Matrix& A, la::Matrix& Q, la::Matrix& R){
 		}
 	
 	}
+}
+
+float la::trace(const la::Matrix& A){
+	const int cols = A[0].size();
+
+	float sum = 0.0;
+	for(int i=0; i<cols; ++i)
+		sum += A[i][i];
+
+	return sum;
+}
+
+la::Matrix la::trans(const la::Matrix& mat){
+	const int rows = mat.size(), cols = mat[0].size();
+	la::Matrix tr(cols, la::Vector(rows));
+
+	for(int i=0; i<rows; ++i)
+		for(int j=0; j<cols; ++j)
+			tr[j][i] = mat[i][j]; 
+
+	return tr;
 }

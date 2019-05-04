@@ -20,12 +20,17 @@ namespace la{
 
 	void householder(Vector u, Matrix& P);
 
-	Matrix matrix_mul(const Matrix& A, const Matrix& B);
+	Matrix mat_mul(const Matrix& A, const Matrix& B);
 
-	void matrix_mul(const Matrix& A, const Matrix& B, Matrix& C,
+	void mat_mul(const Matrix& A, const Matrix& B, Matrix& C,
 		int , int , int, int);
 
 	void qr(const Matrix& A, Matrix& Q, Matrix& R);
+
+	float trace(const Matrix& A);
+
+	Matrix trans(const Matrix& mat);
+
 }
 
 #endif

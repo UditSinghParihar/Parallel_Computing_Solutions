@@ -5,14 +5,15 @@ function [V,D] = my_eig(A)
 	change =0;
 	steps=0;
 
-	V = eye(size(A));
+	D = A;
+	V = eye(size(D));
 
 	while ~is_converged
-		[q, r] = my_qr(A);
-		A = r*q;
+		[q, r] = my_qr(D);
+		D = r*q;
 		V = V*q;
 
-		sum = trace(A);
+		sum = trace(D);
 		change = sum - sum_prev;
 				
 		if abs(change) < eps
@@ -23,6 +24,12 @@ function [V,D] = my_eig(A)
 		steps = steps + 1;
 	end
 
-	D = A;
+	[V,D] =  sortem(V,D);
+
 	change;
 	steps
+
+function [P2,D2]=sortem(P,D)
+	D2=diag(sort(diag(D),'descend'));
+	[c, ind]=sort(diag(D),'descend');
+	P2=P(:,ind);

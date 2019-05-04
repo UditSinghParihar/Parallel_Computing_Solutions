@@ -1,1 +1,2 @@
 1. Add assertion
+2. Make generalize for rectangle matrix(Currently square matrix).
