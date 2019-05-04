@@ -31,6 +31,12 @@ namespace la{
 
 	Matrix trans(const Matrix& mat);
 
+	void sort_index(Vector& v, Vector& idx);
+
+	void sort_eigens(Matrix& V, Matrix& D);
+
+	void eig(const Matrix& A, Matrix& V, Matrix& D);
+
 }
 
 #endif

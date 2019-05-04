@@ -2,6 +2,9 @@
 #include <cstdlib>
 #include <vector>
 #include <cmath>
+#include <limits>
+#include <numeric>
+#include <algorithm>
 #include "linear_algebra.h"
 
 using namespace std;
@@ -177,4 +180,65 @@ la::Matrix la::trans(const la::Matrix& mat){
 			tr[j][i] = mat[i][j]; 
 
 	return tr;
+}
+
+void la::sort_index(la::Vector& v, la::Vector& idx){
+	iota(idx.begin(), idx.end(), 0);
+	sort(idx.begin(), idx.end(), [&v](int i1, int i2){return v[i1] > v[i2];});
+	sort(v.begin(), v.end(), std::greater<float>());
+}
+
+void la::sort_eigens(la::Matrix& V, la::Matrix& D){
+	const int rows = D.size(), cols = D[0].size();
+	
+	la::Vector d(cols);
+	la::Vector idx(cols);
+	for(int i=0; i<cols; ++i)
+		d[i] = D[i][i];
+
+	sort_index(d, idx);
+	
+	for(int i=0; i<cols; ++i)
+		D[i][i] = d[i];
+
+	la::Matrix V_tmp(V);
+	for(int i=0; i<cols; ++i)
+		for(int j=0; j<rows; ++j)
+			V[j][i] = V_tmp[j][idx[i]];
+		
+}
+
+void la::eig(const la::Matrix& A, la::Matrix& V, la::Matrix& D){
+	const int rows = A.size(), cols = A[0].size();
+
+	D = A;
+	for(int i=0; i<cols; ++i)
+		V[i][i] = 1;
+
+	const float eps = 1e-15;
+	bool is_converged = false;
+	float sum_prev = numeric_limits<float>::lowest();
+	float change = 0.0;
+	int steps = 0;
+
+	while(!is_converged){
+		la::Matrix Q(rows, la::Vector(cols));
+		la::Matrix R(rows, la::Vector(cols));
+		la::qr(D, Q, R);
+
+		D = la::mat_mul(R, Q);
+		V = la::mat_mul(V, Q);
+		
+		float sum = trace(D);
+		change = sum - sum_prev;
+		if(abs(change) < eps)
+			is_converged = true;
+		
+		sum_prev = sum;
+		++steps;
+	}
+
+	sort_eigens(V, D);
+
+	cout << "Steps: " << steps << "\n--\n";
 }

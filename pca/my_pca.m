@@ -16,8 +16,10 @@ function [] = my_pca(img_name)
 	v = v(:,1:10);
 	size(v)
 
-	red_img = v*v'*img';
-	red_img = red_img' + m;
+	% red_img = v*v'*img';
+	% red_img = red_img' + m;
+	red_img = img*v*v' + m;
+
 
 	imshow(red_img);
 	drawnow;
