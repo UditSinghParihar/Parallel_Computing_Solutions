@@ -9,7 +9,7 @@
 
 using namespace std;
 
-void la::fill_matrix(la::Matrix& mat, int range){
+void la::fill_matrix(Matrix& mat, int range){
 	const int rows = mat.size(), cols = mat[0].size();
 	for(int i=0; i<rows; ++i){
 		for(int j=0; j<cols; ++j){
@@ -18,7 +18,7 @@ void la::fill_matrix(la::Matrix& mat, int range){
 	}
 }
 
-void la::print_matrix(const la::Matrix& mat){
+void la::print_matrix(const Matrix& mat){
 	for(auto v : mat){
 		for(auto element : v){
 			fprintf(stdout, "%9.4f", element);
@@ -28,22 +28,22 @@ void la::print_matrix(const la::Matrix& mat){
 	cout << "\n---\n";
 }
 
-void la::fill_vector(la::Vector& col, int range){
+void la::fill_vector(Vector& col, int range){
 	for(int i=0; i<col.size(); ++i){
 		col[i] = (rand() % range) + 1;
 	}
 }
 
-void la::print_vector(const la::Vector& vec){
+void la::print_vector(const Vector& vec){
 	for(auto element : vec){;
 		fprintf(stdout, "%9.4f\n", element);
 	}
 	cout << "\n---\n";
 }
 
-void la::check_householder(const la::Matrix& P, const la::Vector& x){
+void la::check_householder(const Matrix& P, const Vector& x){
 	const int rows = P.size();
-	la::Vector res(rows);
+	Vector res(rows);
 
 	for(int i=0; i<rows; ++i){
 		for(int j=0; j<rows; ++j){
@@ -62,7 +62,7 @@ void la::check_householder(const la::Matrix& P, const la::Vector& x){
 	cout << "x_norm = " << x_norm << endl;
 }
 
-void la::householder(la::Vector u, la::Matrix& P){	
+void la::householder(Vector u, Matrix& P){	
 	float u_norm=0.0, sum=0.0;
 	for(int i=0; i<u.size(); ++i)
 		sum += u[i]*u[i];
@@ -89,10 +89,10 @@ void la::householder(la::Vector u, la::Matrix& P){
 	}
 }
 
-la::Matrix la::mat_mul(const la::Matrix& A, const la::Matrix& B){
+la::Matrix la::mat_mul(const Matrix& A, const Matrix& B){
 	const int rows_a = A.size(), cols_a = A[0].size();
 	const int rows_b = B.size(), cols_b = B[0].size();
-	la::Matrix C(rows_a, la::Vector(cols_b));
+	Matrix C(rows_a, Vector(cols_b));
 
 	for(int i=0; i<rows_a; ++i){
 		for(int k=0; k<cols_b; ++k){
@@ -105,7 +105,7 @@ la::Matrix la::mat_mul(const la::Matrix& A, const la::Matrix& B){
 	return C;
 }
 
-void la::mat_mul(const la::Matrix& A, const la::Matrix& B, la::Matrix& C,
+void la::mat_mul(const Matrix& A, const Matrix& B, Matrix& C,
 	int a_row_begin=0, int a_col_begin=0, int b_row_begin=0, int b_col_begin=0){
 	
 	const int rows_a = A.size(), cols_a = A[0].size();
@@ -120,7 +120,7 @@ void la::mat_mul(const la::Matrix& A, const la::Matrix& B, la::Matrix& C,
 	}
 }
 
-void la::qr(const la::Matrix& A, la::Matrix& Q, la::Matrix& R){
+void la::qr(const Matrix& A, Matrix& Q, Matrix& R){
 	const int rows = A.size(), cols = A[0].size();
 
 	for(int i=0; i<rows; ++i){
@@ -132,16 +132,16 @@ void la::qr(const la::Matrix& A, la::Matrix& Q, la::Matrix& R){
 	}
 	for(int i=0; i<cols; ++i){
 		int size = cols-i;
-		la::Vector u(size);
-		la::Matrix H(size, la::Vector(size));
+		Vector u(size);
+		Matrix H(size, Vector(size));
 		
 		for(int j=i, jj=0; j<rows; ++j, ++jj)
 			u[jj] = R[j][i];
 	
 		householder(u, H);
 	
-		la::Matrix Q_sub(rows, la::Vector(cols));
-		la::Matrix R_sub(rows, la::Vector(cols));
+		Matrix Q_sub(rows, Vector(cols));
+		Matrix R_sub(rows, Vector(cols));
 
 		mat_mul(H, R, R_sub, 0, 0, i, i);
 		mat_mul(Q, H, Q_sub, 0, i, 0, 0);
@@ -161,7 +161,7 @@ void la::qr(const la::Matrix& A, la::Matrix& Q, la::Matrix& R){
 	}
 }
 
-float la::trace(const la::Matrix& A){
+float la::trace(const Matrix& A){
 	const int cols = A[0].size();
 
 	float sum = 0.0;
@@ -171,9 +171,9 @@ float la::trace(const la::Matrix& A){
 	return sum;
 }
 
-la::Matrix la::trans(const la::Matrix& mat){
+la::Matrix la::trans(const Matrix& mat){
 	const int rows = mat.size(), cols = mat[0].size();
-	la::Matrix tr(cols, la::Vector(rows));
+	Matrix tr(cols, Vector(rows));
 
 	for(int i=0; i<rows; ++i)
 		for(int j=0; j<cols; ++j)
@@ -182,17 +182,17 @@ la::Matrix la::trans(const la::Matrix& mat){
 	return tr;
 }
 
-void la::sort_index(la::Vector& v, la::Vector& idx){
+void la::sort_index(Vector& v, Vector& idx){
 	iota(idx.begin(), idx.end(), 0);
 	sort(idx.begin(), idx.end(), [&v](int i1, int i2){return v[i1] > v[i2];});
 	sort(v.begin(), v.end(), std::greater<float>());
 }
 
-void la::sort_eigens(la::Matrix& V, la::Matrix& D){
+void la::sort_eigens(Matrix& V, Matrix& D){
 	const int rows = D.size(), cols = D[0].size();
 	
-	la::Vector d(cols);
-	la::Vector idx(cols);
+	Vector d(cols);
+	Vector idx(cols);
 	for(int i=0; i<cols; ++i)
 		d[i] = D[i][i];
 
@@ -201,14 +201,14 @@ void la::sort_eigens(la::Matrix& V, la::Matrix& D){
 	for(int i=0; i<cols; ++i)
 		D[i][i] = d[i];
 
-	la::Matrix V_tmp(V);
+	Matrix V_tmp(V);
 	for(int i=0; i<cols; ++i)
 		for(int j=0; j<rows; ++j)
 			V[j][i] = V_tmp[j][idx[i]];
 		
 }
 
-void la::eig(const la::Matrix& A, la::Matrix& V, la::Matrix& D){
+void la::eig(const Matrix& A, Matrix& V, Matrix& D){
 	const int rows = A.size(), cols = A[0].size();
 
 	D = A;
@@ -222,8 +222,8 @@ void la::eig(const la::Matrix& A, la::Matrix& V, la::Matrix& D){
 	int steps = 0;
 
 	while(!is_converged){
-		la::Matrix Q(rows, la::Vector(cols));
-		la::Matrix R(rows, la::Vector(cols));
+		Matrix Q(rows, Vector(cols));
+		Matrix R(rows, Vector(cols));
 		la::qr(D, Q, R);
 
 		D = la::mat_mul(R, Q);
@@ -241,4 +241,58 @@ void la::eig(const la::Matrix& A, la::Matrix& V, la::Matrix& D){
 	sort_eigens(V, D);
 
 	cout << "Steps: " << steps << "\n--\n";
+}
+
+void la::mean_col(const Matrix& A, Matrix& m){
+	const int rows = A.size(), cols = A[0].size();
+
+	for(int i=0; i<cols; ++i){
+		float sum = 0.0;
+
+		for(int j=0; j<rows; ++j)
+			sum += A[j][i];
+		sum = sum/rows;
+
+		for(int k=0; k<rows; ++k)
+			m[k][i] = sum;
+	}
+}
+
+void la::mat_sub(const Matrix& A, const Matrix& B, Matrix& C){
+	const int rows = A.size(), cols = A[0].size();
+
+	for(int i=0; i<rows; ++i)
+		for(int j=0; j<cols; ++j)
+			C[i][j] = A[i][j] - B[i][j];
+}
+
+void la::mat_add(const Matrix& A, const Matrix& B, Matrix& C){
+	const int rows = A.size(), cols = A[0].size();
+
+	for(int i=0; i<rows; ++i)
+		for(int j=0; j<cols; ++j)
+			C[i][j] = A[i][j] + B[i][j];
+}
+
+void la::pca(const Matrix& A, Matrix& A_red, const int k_col){
+	const int rows = A.size(), cols = A[0].size();
+
+	Matrix m(rows, Vector(cols));
+	mean_col(A, m);
+	mat_sub(A, m, A_red);
+
+	Matrix cov(cols, Vector(cols));
+	mat_mul(trans(A_red), A_red, cov, 0, 0, 0, 0);
+	
+	Matrix V(cols, Vector(cols));
+	Matrix D(cols, Vector(cols));
+	eig(cov, V, D);
+
+	Matrix v_k(cols, Vector(k_col));
+	for(int i=0; i<k_col; ++i)
+		for(int j=0; j<cols; ++j)
+			v_k[j][i] = V[j][i];
+
+
+	mat_add(mat_mul(A_red, mat_mul(v_k, trans(v_k))), m, A_red);
 }

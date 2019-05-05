@@ -27,7 +27,7 @@ function [V,D] = my_eig(A)
 	[V,D] =  sortem(V,D);
 
 	change;
-	steps;
+	steps
 
 function [P2,D2]=sortem(P,D)
 	D2=diag(sort(diag(D),'descend'));

@@ -37,6 +37,14 @@ namespace la{
 
 	void eig(const Matrix& A, Matrix& V, Matrix& D);
 
+	void mean_col(const Matrix& A, Matrix& m);
+
+	void mat_sub(const Matrix& A, const Matrix& B, Matrix& C);
+
+	void mat_add(const Matrix& A, const Matrix& B, Matrix& C);
+
+	void pca(const Matrix& A, Matrix& A_red, const int k_col);
+
 }
 
 #endif
