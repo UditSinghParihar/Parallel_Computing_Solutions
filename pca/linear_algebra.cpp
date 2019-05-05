@@ -130,6 +130,7 @@ void la::qr(const Matrix& A, Matrix& Q, Matrix& R){
 			R[i][j] = A[i][j];
 		}
 	}
+	
 	for(int i=0; i<cols; ++i){
 		int size = cols-i;
 		Vector u(size);

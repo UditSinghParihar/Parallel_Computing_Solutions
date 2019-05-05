@@ -10,6 +10,7 @@ void disp(const Mat& img){
 	namedWindow("opencv_viewer", WINDOW_AUTOSIZE);
 	imshow("opencv_viewer", img);
 	waitKey(0);
+	destroyWindow("opencv_viewer");
 }
 
 void Mat2Matrix(const Mat& gray, Matrix& mat){
@@ -19,23 +20,29 @@ void Mat2Matrix(const Mat& gray, Matrix& mat){
 		for(int j=0; j<cols; ++j)
 			mat[i][j] = float(gray.at<uchar>(i, j));
 
-	for(int i=0; i<cols; ++i)
-		cout << mat[120][i] << " ";
-	cout << "\n--\n";
+	// for(int i=0; i<cols; ++i)
+	// 	cout << mat[25][i] << " ";
+	// cout << "\n--\n";
 }
 
-void Matrix2Mat(){}
+void Matrix2Mat(const Matrix& mat, Mat& gray){
+	const int rows = mat.size(), cols = mat[0].size();
+
+	for(int i=0; i<rows; ++i)
+		for(int j=0; j<cols; ++j)
+			gray.at<uchar>(i, j) = int(mat[i][j]);	
+}
 
 void compress(const string& name){
 	Mat color = imread(name, IMREAD_COLOR);
-	const int scale = 3.5;
-	// resize(color, color, Size(color.cols/scale, color.rows/scale));
+	const float scale = 2;
+	resize(color, color, Size(color.cols/scale, color.rows/scale));
 	fprintf(stdout, "rows: %d\tcols: %d\n--\n", color.rows, color.cols);
 	
 	Mat gray;
 	cvtColor(color, gray, COLOR_BGR2GRAY);
 	// disp(color);
-	disp(gray);
+	// disp(gray);
 
 	// cout << gray.type() << endl << color.type() << endl;
 
@@ -45,24 +52,28 @@ void compress(const string& name){
 	// 			gray.at<uchar>(i, j) = 255;
 
 	// for(int i=0; i<gray.cols; ++i)
-	// 	gray.at<uchar>(120, i) = 255;
+	// 	gray.at<uchar>(25, i) = 255;
 
-	// disp(gray);
+	disp(gray);
 
 	for(int i=0; i<gray.cols; ++i)
-		cout << float(gray.at<uchar>(120, i)) << " ";
+		cout << float(gray.at<uchar>(25, i)) << " ";
 	cout << "\n--\n";
 
 	Matrix mat(gray.rows, Vector(gray.cols));
 	Mat2Matrix(gray, mat);
 
-	// Matrix mat_red(gray.rows, Vector(gray.cols));
-	// const int k_col = 10;
-	// pca(mat, mat_red, k_col);
+	Matrix mat_red(gray.rows, Vector(gray.cols));
+	const int k_col = 10;
+	pca(mat, mat_red, k_col);
 
-	// for(int i=0; i<gray.cols; ++i)
-	// 	cout << mat_red[120][i] << " ";
-	// cout << "\n--\n";
+	for(int i=0; i<gray.cols; ++i)
+		cout << mat_red[25][i] << " ";
+	cout << "\n--\n";
+
+	Mat gray_red(gray.size(), CV_8UC1);
+	Matrix2Mat(mat_red, gray_red);
+	disp(gray_red);
 }
 
 int main(int argc, char const *argv[]){
