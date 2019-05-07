@@ -17,3 +17,6 @@
 	4. Resources:
 		1. [IIT M OpenMP slides](http://www.cse.iitm.ac.in/~rupesh/teaching/hpc/jun16/4-openmp.pdf)
 		2. [Jaka's Blog](http://jakascorner.com/blog/2016/06/omp-for-reduction.html)
+
+3. **pca** :
+	1. Parallel implementation of PCA for image compression from scratch.

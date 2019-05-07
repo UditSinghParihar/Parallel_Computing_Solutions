@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <cuda_runtime.h>
 #include <cuda.h>
+#include <stdlib.h>
 
 #define N (2048*2048)
 #define THREADS_PER_BLOCK 512
@@ -15,6 +16,12 @@ void print_few(int* array){
 		printf("%d ", array[i]);
 	}
 	printf("\n");
+}
+
+void random_ints(int *a, int n){
+   int i;
+   for (i = 0; i < n; ++i)
+       a[i] = rand() %10;
 }
 
 int main(void) {
@@ -40,7 +47,7 @@ int main(void) {
 	print_few(a);
 	print_few(b);
 	print_few(c);
-	
+
 	// Cleanup
 	free(a); free(b); free(c);
 	cudaFree(d_a); cudaFree(d_b); cudaFree(d_c);
