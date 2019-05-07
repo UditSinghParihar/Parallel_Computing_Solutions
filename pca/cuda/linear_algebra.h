@@ -45,6 +45,7 @@ namespace la{
 
 	void pca(const Matrix& A, Matrix& A_red, const int k_col);
 
+	void matrixMul(float *A, float *B, float *C, int N);
 }
 
 #endif

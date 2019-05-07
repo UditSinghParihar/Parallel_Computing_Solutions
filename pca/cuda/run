@@ -1,0 +1,3 @@
+#!/bin/bash
+module load cuda/9.0 &&
+nvcc pca.cu linear_algebra.cu -std=c++11

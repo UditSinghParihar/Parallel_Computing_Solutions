@@ -5,9 +5,39 @@
 #include <limits>
 #include <numeric>
 #include <algorithm>
+#include <cuda_runtime.h>
 #include "linear_algebra.h"
 
 using namespace std;
+
+__global__ void matrixMulKernel(float* A, float* B, float* C, int N) {
+    int ROW = blockIdx.y*blockDim.y+threadIdx.y;
+    int COL = blockIdx.x*blockDim.x+threadIdx.x;
+
+    float tmpSum = 0;
+
+    if(ROW < N && COL < N){
+        for (int i = 0; i < N; i++){
+            tmpSum += A[ROW * N + i] * B[i * N + COL];
+        }
+    }
+    
+    C[ROW * N + COL] = tmpSum;
+}
+
+
+void la::matrixMul(float *A, float *B, float *C, int N){
+	dim3 threadsPerBlock(N, N);
+    dim3 blocksPerGrid(1, 1);
+        if (N*N > 512){
+            threadsPerBlock.x = 512;
+            threadsPerBlock.y = 512;
+            blocksPerGrid.x = ceil(double(N)/double(threadsPerBlock.x));
+            blocksPerGrid.y = ceil(double(N)/double(threadsPerBlock.y));
+        }
+
+    matrixMulKernel<<<blocksPerGrid,threadsPerBlock>>>(A, B, C, N);
+}
 
 void la::fill_matrix(Matrix& mat, int range){
 	const int rows = mat.size(), cols = mat[0].size();

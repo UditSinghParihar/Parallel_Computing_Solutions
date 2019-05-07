@@ -11,7 +11,7 @@ __global__ void add(int *a, int *b, int* d) {
 	int bx = blockDim.x, by = blockDim.y;
 	int gy = gridDim.y;
 	
-	int bid = bidx*gy + bidy;	
+	int bid = bidx*gy + bidy;
 	int tid = bid*bx*by + tx*by + ty;
 	
 	int c = a[tid] + b[tid];

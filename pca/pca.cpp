@@ -60,11 +60,11 @@ void compress(const string& name){
 		cout << float(gray.at<uchar>(25, i)) << " ";
 	cout << "\n--\n";
 
-	Matrix mat(gray.rows, Vector(gray.cols));
+	Matrix mat(gray.rows, la::Vector(gray.cols));
 	Mat2Matrix(gray, mat);
 
-	Matrix mat_red(gray.rows, Vector(gray.cols));
-	const int k_col = 10;
+	Matrix mat_red(gray.rows, la::Vector(gray.cols));
+	const int k_col = 5;
 	pca(mat, mat_red, k_col);
 
 	for(int i=0; i<gray.cols; ++i)
@@ -82,17 +82,17 @@ int main(int argc, char const *argv[]){
 		return 1;
 	}
 
-	// const int rows_a=20, cols_a=8, range=10;
-	// Matrix A(rows_a, Vector(cols_a));
-	// fill_matrix(A, range);
-	// print_matrix(A);
+	const int rows_a=10, cols_a=8, range=10;
+	Matrix A(rows_a, Vector(cols_a));
+	fill_matrix(A, range);
+	print_matrix(A);
 
-	// Matrix A_red(rows_a, Vector(cols_a));
-	// const int k_col = 4;
-	// pca(A, A_red, k_col);
-	// print_matrix(A_red);
+	Matrix A_red(rows_a, Vector(cols_a));
+	const int k_col = 5;
+	pca(A, A_red, k_col);
+	print_matrix(A_red);
 
-	compress(argv[1]);
+	// compress(argv[1]);
 
 	return 0;
 }
